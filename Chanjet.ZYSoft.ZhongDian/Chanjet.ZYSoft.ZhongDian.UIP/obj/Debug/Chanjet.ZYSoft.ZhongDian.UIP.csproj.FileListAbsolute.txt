@@ -1,0 +1,7 @@
+E:\SouceCode\TPSourceCode\ZYSoft_TPlus_ZhongDian\pubref\Chanjet.ZYSoft.ZhongDian.UIP.dll
+E:\SouceCode\TPSourceCode\ZYSoft_TPlus_ZhongDian\pubref\Chanjet.ZYSoft.ZhongDian.UIP.pdb
+E:\SouceCode\TPSourceCode\ZYSoft_TPlus_ZhongDian\Chanjet.ZYSoft.ZhongDian\Chanjet.ZYSoft.ZhongDian.UIP\obj\Debug\Chanjet.ZYSoft.ZhongDian.UIP.csproj.AssemblyReference.cache
+E:\SouceCode\TPSourceCode\ZYSoft_TPlus_ZhongDian\Chanjet.ZYSoft.ZhongDian\Chanjet.ZYSoft.ZhongDian.UIP\obj\Debug\Chanjet.ZYSoft.ZhongDian.UIP.csproj.CoreCompileInputs.cache
+E:\SouceCode\TPSourceCode\ZYSoft_TPlus_ZhongDian\Chanjet.ZYSoft.ZhongDian\Chanjet.ZYSoft.ZhongDian.UIP\obj\Debug\Chanjet.ZYSoft.ZhongDian.UIP.csproj.CopyComplete
+E:\SouceCode\TPSourceCode\ZYSoft_TPlus_ZhongDian\Chanjet.ZYSoft.ZhongDian\Chanjet.ZYSoft.ZhongDian.UIP\obj\Debug\Chanjet.ZYSoft.ZhongDian.UIP.dll
+E:\SouceCode\TPSourceCode\ZYSoft_TPlus_ZhongDian\Chanjet.ZYSoft.ZhongDian\Chanjet.ZYSoft.ZhongDian.UIP\obj\Debug\Chanjet.ZYSoft.ZhongDian.UIP.pdb

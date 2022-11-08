@@ -67,6 +67,9 @@
 							<el-tab-pane label="标签补打" name="tab2">
 								<div id='grid2'></div>
 							</el-tab-pane>
+							<el-tab-pane label="库存补打" name="tab3">
+								<div id='grid3'></div>
+							</el-tab-pane>
 						</el-tabs>
 						<div style='border-bottom: 1px solid #F0F0F0;'>
 							<p id='state' style="padding: 5px;">通讯连接中...</p>

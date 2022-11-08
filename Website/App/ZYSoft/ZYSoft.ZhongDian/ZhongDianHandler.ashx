@@ -51,6 +51,14 @@ public class ZhongDianHandler : IHttpHandler
                     accId = context.Request.Form["accId"] ?? "";
                     result = DBMethods.GetList2(inv, partner, batchNo, barcode, startDate, endDate, invStd, accId);
                     break;
+                case "getlist3":
+                    inv = context.Request.Form["inv"] ?? "";
+                    string whName = context.Request.Form["whName"] ?? "";
+                    string posName = context.Request.Form["posName"] ?? "";
+                    batchNo = context.Request.Form["batchNo"] ?? "";
+                    accId = context.Request.Form["accId"] ?? "";
+                    result = DBMethods.GetList3(inv, whName, posName, batchNo, accId);
+                    break;
                 case "getbase":
                     result = DBMethods.GetBaseData();
                     break;
@@ -236,6 +244,78 @@ public class ZhongDianHandler : IHttpHandler
             }
         }
         #endregion
+
+        #region 查询数据源3
+        public static string GetList3(string inv, string whName, string posName, string batchNo, string accId)
+        {
+            if (string.IsNullOrEmpty(accId))
+            {
+                return JsonConvert.SerializeObject(new
+                {
+                    state = "error",
+                    data = new List<string>(),
+                    msg = "没有获取到账套信息!"
+                });
+            }
+            var list = new List<Result>();
+            try
+            {
+                string sqlWhere = " 1=1 ";
+                if (!string.IsNullOrEmpty(inv))
+                {
+                    sqlWhere += string.Format(" AND ( cInvName like ''%{0}%'' or cInvCode like ''%{0}%'' )", inv);
+                }
+                if (!string.IsNullOrEmpty(whName))
+                {
+                    sqlWhere += string.Format(@" AND ( cWhName like ''%{0}%'' or cWhCode like ''%{0}%'' )", whName);
+                }
+                if (!string.IsNullOrEmpty(posName))
+                {
+                  sqlWhere += string.Format(@" AND ( cPosName like ''%{0}%'' or cPosCode like ''%{0}%'' )", posName);
+                }
+                if (!string.IsNullOrEmpty(batchNo))
+                {
+                    sqlWhere += string.Format(@" AND  cBatch like ''%{0}%''", batchNo);
+                } 
+
+                string sql =
+                        string.Format(@"EXEC ZYSoft_ZDXN_2021.DBO.P_GetLabPrintData 
+                                    @FAccountNo = '{0}',
+                                    @FType = 3,
+                                    @FFilter = '{1}'",
+                          accId, sqlWhere);
+                DataTable dt = ZYSoft.DB.BLL.Common.ExecuteDataTable(sql);
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    return JsonConvert.SerializeObject(new
+                    {
+                        state = dt.Rows.Count > 0 ? "success" : "error",
+                        data = dt,
+                        msg = ""
+                    });
+                }
+                else
+                {
+                    return JsonConvert.SerializeObject(new
+                    {
+                        state = "error",
+                        data = new List<string>(),
+                        msg = "没有查询到数据!"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return JsonConvert.SerializeObject(new
+                {
+                    state = "error",
+                    data = new List<string>(),
+                    msg = ex.Message
+                });
+            }
+        }
+        #endregion
+
 
         #region 查询固化条件
         public static string GetBaseData()

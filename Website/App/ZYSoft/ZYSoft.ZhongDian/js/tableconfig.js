@@ -6,7 +6,8 @@
     hozAlign: "center",
     visible: false,
     headerSort: false,
-  }, {
+  },
+  {
     title: "id",
     field: "id",
     headerHozAlign: "center",
@@ -187,4 +188,101 @@ var grid2TableConf = [
     width: 320,
     headerSort: false,
   },
-]; 
+];
+var grid3TableConf = [
+  {
+    title: "id",
+    field: "id",
+    headerHozAlign: "center",
+    hozAlign: "center",
+    visible: false,
+    headerSort: false,
+  },
+  {
+    title: "仓库",
+    field: "cWhName",
+    headerHozAlign: "center",
+    hozAlign: "center",
+    width: 150,
+    headerSort: false,
+  },{
+    title: "货位",
+    field: "cPosName",
+    headerHozAlign: "center",
+    hozAlign: "center",
+    width: 150,
+    headerSort: false,
+  },{
+    title: "存货编码",
+    field: "cInvCode",
+    headerHozAlign: "center",
+    hozAlign: "center",
+    width: 150,
+    headerSort: false,
+  },
+  {
+    title: "存货名称",
+    field: "cInvName",
+    headerHozAlign: "center",
+    hozAlign: "center",
+    headerSort: false,
+    width: 200,
+  },
+  {
+    title: "规格型号",
+    field: "cInvStd",
+    headerHozAlign: "center",
+    hozAlign: "center",
+    headerSort: false,
+    width: 250,
+  },
+  {
+    title: "单位",
+    field: "cUnit",
+    headerHozAlign: "center",
+    hozAlign: "center",
+    width: 120,
+    headerSort: false,
+  },
+  {
+    title: "批号",
+    field: "cBatch",
+    headerHozAlign: "center",
+    hozAlign: "center",
+    width: 120,
+    headerSort: false 
+  },
+  {
+    title: "数量",
+    field: "iQuantity",
+    headerHozAlign: "center",
+    hozAlign: "right",
+    width: 120,
+    headerSort: false
+  },
+  {
+    title: "包装数量",
+    field: "iPackQuantity",
+    headerHozAlign: "center",
+    hozAlign: "center",
+    width: 120,
+    headerSort: false,
+    editor: "number",
+    editorParams: {
+      min: 1,
+      step: 1,
+    },
+  },{
+    title: "打印箱数",
+    field: "iPrintQty",
+    headerHozAlign: "center",
+    hozAlign: "center",
+    width: 120,
+    headerSort: false,
+    editor: "number",
+    editorParams: {
+      min: 1,
+      step: 1,
+    },
+  }
+]

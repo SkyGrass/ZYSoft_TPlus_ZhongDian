@@ -1,7 +1,7 @@
 ﻿var socket = undefined;
 var timer = undefined;
 var DESIGN = 1, PREVIEW = 2, PRINT = 3;
-var BILL = 1, REPRINT = 2, PRODUCTION = 3;
+var BILL = 1, REPRINT = 2, STOCK = 3;
 var RPTID = 1
 var self = (vm = new Vue({
   el: "#app",
@@ -14,6 +14,9 @@ var self = (vm = new Vue({
         orderNo: "",
         partner: "",
 
+        whName: "",
+        posName: "",
+
         batchNo: "",
         barcode: "",
         invStd: "",
@@ -24,6 +27,7 @@ var self = (vm = new Vue({
       activeName: "tab1",
       grid1: {},
       grid2: {},
+      grid3: {},
     };
   },
   computed: {},
@@ -48,6 +52,8 @@ var self = (vm = new Vue({
                 self.queryGrid1(row);
               } else if (self.activeName == 'tab2') {
                 self.queryGrid2(row);
+              } else if (self.activeName == 'tab3') {
+                self.queryGrid3(row);
               }
             }
 
@@ -72,6 +78,8 @@ var self = (vm = new Vue({
         this.queryGrid1()
       } else if (this.activeName == 'tab2') {
         this.queryGrid2()
+      } else if (this.activeName == 'tab3') {
+        this.queryGrid3()
       }
     },
     doPreview() {
@@ -80,10 +88,17 @@ var self = (vm = new Vue({
         data = this.grid1.getSelectedData()
       } else if (this.activeName == 'tab2') {
         data = this.grid2.getSelectedData()
+      } else if (this.activeName == 'tab3') {
+        data = this.grid3.getSelectedData()
       }
       var vaild = data.some(function (f) { return f['iPackQuantity' || 'FQty'] <= 0 });
+      if (self.activeName == 'tab3' && !vaild) {
+        vaild = data.some(function (f) {
+          return f['iPrintQty'] <= 0
+        });
+      }
       if (vaild > 0) {
-        return layer.msg("发现包装数量为0的记录被选中!", {
+        return layer.msg("发现数量为0的记录被选中!", {
           zIndex: new Date() * 1,
           icon: 5,
         });
@@ -95,9 +110,10 @@ var self = (vm = new Vue({
           function (index) {
             self.doSend(PREVIEW, data.map(function (f) {
               return {
-                FEntryID: self.activeName == 'tab1' ? f.EnryID : f.ID,
+                FEntryID: self.activeName == 'tab1' ? f.EnryID : (f.ID || f.id),
                 FPackQty: f.iPackQuantity || f.FQty,
-                FBatch: f.cBatch || f.FBatch
+                FBatch: f.cBatch || f.FBatch,
+                FPrintQty: f.iPrintQty
               }
             }))
             setTimeout(function () {
@@ -118,10 +134,19 @@ var self = (vm = new Vue({
         data = this.grid1.getSelectedData()
       } else if (this.activeName == 'tab2') {
         data = this.grid2.getSelectedData()
+      } else if (this.activeName == 'tab3') {
+        data = this.grid3.getSelectedData()
       }
-      var vaild = data.some(function (f) { return f['iPackQuantity' || 'FQty'] <= 0 });
+      var vaild = data.some(function (f) {
+        return f['iPackQuantity' || 'FQty'] <= 0
+      });
+      if (self.activeName == 'tab3' && !vaild) {
+        vaild = data.some(function (f) {
+          return f['iPrintQty'] <= 0
+        });
+      }
       if (vaild > 0) {
-        return layer.msg("发现包装数量为0的记录被选中!", {
+        return layer.msg("发现数量为0的记录被选中!", {
           zIndex: new Date() * 1,
           icon: 5,
         });
@@ -134,9 +159,10 @@ var self = (vm = new Vue({
             var _index = layer.load(2);
             self.doSend(PRINT, data.map(function (f) {
               return {
-                FEntryID: self.activeName == 'tab1' ? f.EnryID : f.ID,
+                FEntryID: self.activeName == 'tab1' ? f.EnryID : (f.ID || f.id),
                 FPackQty: f.iPackQuantity || f.FQty,
-                FBatch: f.cBatch || f.FBatch
+                FBatch: f.cBatch || f.FBatch,
+                FPrintQty: f.iPrintQty
               }
             }));
             setTimeout(function () {
@@ -157,7 +183,7 @@ var self = (vm = new Vue({
           $.extend({},
             {
               FType: flag,
-              FBillType: self.activeName == 'tab1' ? BILL : REPRINT,
+              FBillType: self.activeName == 'tab1' ? BILL : (self.activeName == 'tab2' ? REPRINT : STOCK),
               FAccountID: accounId
             },
             { Entry: data }
@@ -269,6 +295,26 @@ var self = (vm = new Vue({
           });
         }
       }
+      if (self.activeName == 'tab3') {
+        var ps = Object.keys(self.grid3);
+        if (ps.length <= 0) {
+          this.initGrid({
+            gridId: "grid3",
+            key: "id",
+            columns: [
+              {
+                width: 80,
+                title: "操作",
+                formatter: "rowSelection",
+                titleFormatter: "rowSelection",
+                headerHozAlign: "center",
+                hozAlign: "center",
+                headerSort: false,
+              },
+            ].concat(grid3TableConf),
+          });
+        }
+      }
     },
     queryGrid1(row) {
       var index = layer.load(2);
@@ -296,6 +342,23 @@ var self = (vm = new Vue({
           Object.assign(
             {
               SelectApi: "getList2",
+            },
+            self.queryForm, row
+          ),
+          "POST"
+        );
+        layer.close(index);
+      }, 500);
+    },
+    queryGrid3(row) {
+      var index = layer.load(2);
+      setTimeout(function () {
+        self.grid3.clearData();
+        self.grid3.setData(
+          "./ZhongDianHandler.ashx",
+          Object.assign(
+            {
+              SelectApi: "getList3",
             },
             self.queryForm, row
           ),
@@ -368,6 +431,15 @@ var self = (vm = new Vue({
       var ps = Object.keys(self.grid2);
       if (ps.length > 0) {
         self.grid2.setHeight(
+          $(window).height() -
+          $("#toolbarContainer").height() -
+          85
+        );
+      }
+
+      var ps3 = Object.keys(self.grid3);
+      if (ps3.length > 0) {
+        self.grid3.setHeight(
           $(window).height() -
           $("#toolbarContainer").height() -
           85

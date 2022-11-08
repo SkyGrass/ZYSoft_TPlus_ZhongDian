@@ -139,6 +139,47 @@
                     </el-form>
                 </el-col>
             </el-row>
+            <el-row v-if="fromTab3">
+                <el-col :push="1" :span="20" :pull="1">
+                    <el-form ref="form" :model="form" label-width="100px" size="mini" inline>
+                        <table>
+                            <tr>
+                                <td>
+                                    <el-form-item label="仓库" class="form-item-max" prop='whName'>
+                                        <el-input clearable style="width:100%" v-model="form.whName"
+                                            placeholder="请输入仓库编码或名称" class="noBorder">
+                                        </el-input>
+                                    </el-form-item>
+                                </td>
+                                <td>
+                                    <el-form-item label="货位" class="form-item-max" prop='posName'>
+                                        <el-input clearable style="width:100%" v-model="form.posName"
+                                            placeholder="请输入货位编码或名称" class="noBorder">
+                                        </el-input>
+                                    </el-form-item>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <el-form-item label="存货" class="form-item-max" prop='inv'>
+                                        <el-input clearable style="width:100%" v-model="form.inv"
+                                            placeholder="请输入存货编码或名称" class="noBorder">
+                                        </el-input>
+                                    </el-form-item>
+                                </td>
+                                <td>
+                                    <el-form-item label="批号" class="form-item-max" prop='batchNo'>
+                                        <el-input clearable style="width:100%" v-model="form.batchNo"
+                                            placeholder="请输入批号" class="noBorder">
+                                        </el-input>
+                                    </el-form-item>
+                                </td>
+                            </tr> 
+                        </table>
+                    </el-form>
+                </el-col>
+            </el-row>
         </div>
         <script src="../js/poly/js.polyfills.js"></script>
         <script src="../js/poly/es5.polyfills.js"></script>

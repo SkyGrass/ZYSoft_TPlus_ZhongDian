@@ -70,6 +70,9 @@
 							<el-tab-pane label="库存补打" name="tab3">
 								<div id='grid3'></div>
 							</el-tab-pane>
+							<el-tab-pane label="进货单打印(特殊)" name="tab4">
+								<div id='grid4'></div>
+							</el-tab-pane>
 						</el-tabs>
 						<div style='border-bottom: 1px solid #F0F0F0;'>
 							<p id='state' style="padding: 5px;">通讯连接中...</p>
@@ -97,8 +100,8 @@
 			var loginName = "<%=lblUserName.Text%>";
 			var loginUserId = "<%=lbUserId.Text%>";
 			var accounId = '<%=lbAccount.Text%>'
-            var database = '<%=lbDataBase.Text%>'
-        </script>
+			var database = '<%=lbDataBase.Text%>'
+		</script>
 		<script src="./js/layui/layui.js"></script>
 		<script src="./js/dialog/dialog.js"></script>
 

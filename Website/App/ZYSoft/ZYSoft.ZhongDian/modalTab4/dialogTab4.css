@@ -1,0 +1,7 @@
+table,
+th,
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    /* 消除双边框效果 */
+}

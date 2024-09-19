@@ -59,6 +59,16 @@ public class ZhongDianHandler : IHttpHandler
                     accId = context.Request.Form["accId"] ?? "";
                     result = DBMethods.GetList3(inv, whName, posName, batchNo, accId);
                     break;
+                case "getlist4":
+                    inv = context.Request.Form["inv"] ?? "";
+                    orderNo = context.Request.Form["orderNo"] ?? "";
+                    partner = context.Request.Form["partner"] ?? "";
+                    invStd = context.Request.Form["invStd"] ?? "";
+                    startDate = context.Request.Form["startDate"] ?? "";
+                    endDate = context.Request.Form["endDate"] ?? "";
+                    accId = context.Request.Form["accId"] ?? "";
+                    result = DBMethods.GetList4(inv, orderNo, partner, startDate, endDate, invStd, accId);
+                    break;
                 case "getbase":
                     result = DBMethods.GetBaseData();
                     break;
@@ -271,12 +281,12 @@ public class ZhongDianHandler : IHttpHandler
                 }
                 if (!string.IsNullOrEmpty(posName))
                 {
-                  sqlWhere += string.Format(@" AND ( cPosName like ''%{0}%'' or cPosCode like ''%{0}%'' )", posName);
+                    sqlWhere += string.Format(@" AND ( cPosName like ''%{0}%'' or cPosCode like ''%{0}%'' )", posName);
                 }
                 if (!string.IsNullOrEmpty(batchNo))
                 {
                     sqlWhere += string.Format(@" AND  cBatch like ''%{0}%''", batchNo);
-                } 
+                }
 
                 string sql =
                         string.Format(@"EXEC ZYSoft_ZDXN_2021.DBO.P_GetLabPrintData 
@@ -316,6 +326,85 @@ public class ZhongDianHandler : IHttpHandler
         }
         #endregion
 
+        #region 查询数据源4
+        public static string GetList4(string inv, string orderNo, string partner, string startDate,
+         string endDate, string invStd, string accId)
+        {
+            if (string.IsNullOrEmpty(accId))
+            {
+                return JsonConvert.SerializeObject(new
+                {
+                    state = "error",
+                    data = new List<string>(),
+                    msg = "没有获取到账套信息!"
+                });
+            }
+            var list = new List<Result>();
+            try
+            {
+                string sqlWhere = " 1=1 ";
+                if (!string.IsNullOrEmpty(inv))
+                {
+                    sqlWhere += string.Format(" AND ( cInvName like ''%{0}%'' or cInvCode like ''%{0}%'' )", inv);
+                }
+                if (!string.IsNullOrEmpty(orderNo))
+                {
+                    sqlWhere += string.Format(@" AND  code like ''%{0}%''", orderNo);
+                }
+                if (!string.IsNullOrEmpty(partner))
+                {
+                    sqlWhere += string.Format(@" AND  cVenName like ''%{0}%''", partner);
+                }
+                if (!string.IsNullOrEmpty(invStd))
+                {
+                    sqlWhere += string.Format(@" AND  cInvStd like ''%{0}%''", invStd);
+                }
+                if (!string.IsNullOrEmpty(startDate))
+                {
+                    sqlWhere += string.Format(@" AND  VoucherDate >= ''{0} 00:00:00''", startDate);
+                }
+                if (!string.IsNullOrEmpty(endDate))
+                {
+                    sqlWhere += string.Format(@" AND  VoucherDate <= ''{0} 23:59:59''", endDate);
+                }
+
+                string sql =
+                        string.Format(@"EXEC ZYSoft_ZDXN_2021.DBO.P_GetLabPrintData 
+                                    @FAccountNo = '{0}',
+                                    @FType = 4,
+                                    @FFilter = '{1}'",
+                          accId, sqlWhere);
+                DataTable dt = ZYSoft.DB.BLL.Common.ExecuteDataTable(sql);
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    return JsonConvert.SerializeObject(new
+                    {
+                        state = dt.Rows.Count > 0 ? "success" : "error",
+                        data = dt,
+                        msg = ""
+                    });
+                }
+                else
+                {
+                    return JsonConvert.SerializeObject(new
+                    {
+                        state = "error",
+                        data = new List<string>(),
+                        msg = "没有查询到数据!"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return JsonConvert.SerializeObject(new
+                {
+                    state = "error",
+                    data = new List<string>(),
+                    msg = ex.Message
+                });
+            }
+        }
+        #endregion
 
         #region 查询固化条件
         public static string GetBaseData()

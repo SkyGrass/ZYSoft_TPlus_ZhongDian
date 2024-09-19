@@ -22,7 +22,7 @@ function init(opt) {
     },
     computed: {
       fromTab1() {
-        return opt.fromTab == 'tab1'
+        return opt.fromTab == 'tab1' || opt.fromTab == 'tab4'
       },
       fromTab2() {
         return opt.fromTab == 'tab2'
@@ -32,7 +32,7 @@ function init(opt) {
       }
     },
     watch: {},
-    mounted() { 
+    mounted() {
       this.form = opt.parent.queryForm;
     },
   }));
@@ -73,7 +73,7 @@ function getSelect() {
   } else if (dialog.fromTab3) {
     return [dialog.form].map(function (m) {
       var t = {};
-      t.inv = m.inv; 
+      t.inv = m.inv;
       t.batchNo = m.batchNo;
       t.whName = m.whName;
       t.posName = m.posName;
